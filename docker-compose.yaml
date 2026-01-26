@@ -1,0 +1,19 @@
+services:
+  ros1_orin_nano:
+    image: ros1_orin_nano
+    build:
+      context: ./docker/
+      dockerfile: Dockerfile
+    container_name: ros1_orin_nano
+    environment:
+      - ROS_MASTER_URI=http://192.168.1.100:11311  # IP of the PC running roscore
+      - ROS_IP=192.168.1.101                       # IP of this Orin Nano
+    privileged: true
+    volumes:
+      # For accessing hardware
+      - /dev/:/dev
+      # By default, mount the current directory. Change to the line below for development
+      - ./drone_ws:/root/drone_ws
+      - ./bags:/root/bags
+    network_mode: "host"
+    command: tail -f /dev/null

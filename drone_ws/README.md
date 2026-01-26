@@ -1,0 +1,1 @@
+Place here everything that we want to see inside the Docker.
