@@ -1,0 +1,18 @@
+<launch>
+<!-- vim: set ft=xml noet : -->
+
+  <arg name="rigid_body_name"/>
+  <arg name="config_file"/>
+
+  <node pkg="vrpn_client_ros" type="vrpn_client_node" name="vrpn_client_node" output="screen">
+    <rosparam command="load" file="$(arg config_file)"/>
+    <rosparam param="trackers" subst_value="true">
+      - $(arg rigid_body)
+    </rosparam>
+    <remap from="/vrpn_client_node/vincent/pose" to="/optitrack/pose" />
+  </node>
+
+  <!-- Node to change the tf of the pose given by optitrack to match it with mavros-->
+  <node pkg="optitrack_arena" type="optitrack_pose_tf" name="optitrack_pose_tf" output="screen"/>
+
+</launch>

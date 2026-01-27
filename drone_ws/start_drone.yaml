@@ -1,0 +1,33 @@
+# ~/.config/tmuxinator/drone_session.yml
+# IMPORTANT: adjust: fcu_url, gcs_url, rigid_body, and static TFs
+name: drone_session
+root: ./
+startup_window: platform
+windows:
+  - platform:
+      layout: tiled
+      panes:
+        - roscore
+        - sleep 1; roslaunch mavros px4.launch fcu_url:=/dev/ttyTHS1:921600 gcs_url:=udp://@192.168.0.108:14450
+
+  - optitrack:
+      layout: tiled
+      panes:
+        - sleep 1; roslaunch optitrack_arena run_optitrack.launch rigid_body:=lilly config_file:=config/optitrack.yaml
+
+  - sensors:
+      layout: tiled
+      panes:
+        - sleep 1; roslaunch realsense2_camera rs_camera.launch align_depth:=true
+
+  - static_transforms:
+      layout: tiled
+      panes:
+
+        - sleep 3; rosrun tf static_transform_publisher 0 0 0 0 0 0 map odom 100
+        - sleep 3; rosrun tf static_transform_publisher 0 0 0 0 0 0 lilly base_link 100
+
+        - sleep 3; rosrun tf static_transform_publisher 0.19 0 -0.1 0 0.7071 0 0.7071 base_link camera_link 100
+
+        # TODO(@jdeese) CHECK IF THE FOLLOWING IS REQUIRED
+        # - sleep 3; rosrun tf static_transform_publisher 0 0 0 1 0 0 0 base_link base_link_frd 100

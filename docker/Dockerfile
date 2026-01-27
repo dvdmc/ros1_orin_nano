@@ -18,35 +18,51 @@ RUN apt-get update && apt-get upgrade -y \
     gdb \
     net-tools \
     cmake \
+    software-properties-common \
     lsb-release \
+    curl \
     iputils-ping
 
 
 RUN echo "set -g mouse on" > /root/.tmux.conf
 
 # Mavlink
-RUN apt-get update && apt-get install ros-noetic-mavros ros-noetic-mavros-extras
+RUN apt-get install -y ros-noetic-mavros ros-noetic-mavros-extras
 RUN wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh \
     && chmod a+x install_geographiclib_datasets.sh \
     && ./install_geographiclib_datasets.sh \
     && rm install_geographiclib_datasets.sh
 
 # Realsense
-RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-RUN sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
-RUN sudo apt-get update && sudo apt-get install librealsense2-dkms \
-                                                librealsense2-utils \
-                                                librealsense2-dbg \
-                                                librealsense2-dev \
-                                                ros-noetic-realsense2-camera
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | tee /etc/apt/keyrings/librealsense.pgp > /dev/null
+RUN echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | \
+    tee /etc/apt/sources.list.d/librealsense.list
+RUN apt-get update && apt-get install -y \
+    librealsense2-utils \
+    librealsense2-dbg \
+    librealsense2-dev \
+    ros-noetic-realsense2-camera
 
 # Optitrack
-RUN sudo apt-get install ros-noetic-vrpn-client-ros
+RUN apt-get install -y ros-noetic-vrpn-client-ros
+
+# Optitrack arena (Unizar package)
+COPY ./optitrack_arena /root/optitrack_ws/src/optitrack_arena
+WORKDIR /root/optitrack_ws
+RUN apt-get update && apt-get install -y python3-catkin-tools ros-noetic-tf2-sensor-msgs ros-noetic-tf2-geometry-msgs
+RUN source /opt/ros/noetic/setup.bash && catkin build
+
+# PTZ
+# RUN apt-get install -y ros-noetic-ptz
+
+
 
 # Indicate that we are inside a drone
-RUN echo "PS1='🚁 🤖'\${PS1}" >> /root/.bashrc
+RUN echo "PS1='🚁 🤖 🐋 '\${PS1}" >> /root/.bashrc
 
 RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc
+RUN echo "source /root/optitrack_ws/devel/setup.bash" >> /root/.bashrc
 
 RUN rm -rf log # remove log folder
 
