@@ -4,7 +4,7 @@ IMPORTANT: Configure the ROS_MASTER_URI and ROS_IP in `docker-compose.yaml`.
 
 ## Basic launch commands
 
-Go in the terminal to the directory where `docker-compose.yaml` is. Then:
+Open the terminal in the directory where `docker-compose.yaml` is (this repository's top directory). Then:
 
 Build Docker image (if needed):
 ```bash
@@ -18,7 +18,7 @@ sudo docker compose up -d
 
 Attach the terminal to the container:
 ```bash
-sudo docker exec -it ros1_orin_nano
+sudo docker exec -it ros1_orin_nano /bin/bash
 ```
 
 Move to the `drone_ws` directory inside the container:
