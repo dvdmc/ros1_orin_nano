@@ -56,7 +56,8 @@ RUN source /opt/ros/noetic/setup.bash && catkin build
 # PTZ
 # RUN apt-get install -y ros-noetic-ptz
 
-
+# Other ROS packages
+RUN apt-get install -y ros-noetic-rqt-tf-tree
 
 # Indicate that we are inside a drone
 RUN echo "PS1='🚁 🤖 🐋 '\${PS1}" >> /root/.bashrc
