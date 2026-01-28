@@ -9,7 +9,7 @@
     <rosparam param="trackers" subst_value="true">
       - $(arg rigid_body)
     </rosparam>
-    <remap from="/vrpn_client_node/vincent/pose" to="/optitrack/pose" />
+    <remap from="/vrpn_client_node/$(arg rigid_body)/pose" to="/optitrack/pose" />
   </node>
 
   <!-- Node to change the tf of the pose given by optitrack to match it with mavros-->
