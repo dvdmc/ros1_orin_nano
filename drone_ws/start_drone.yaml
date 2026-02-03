@@ -8,7 +8,7 @@ windows:
       layout: tiled
       panes:
         - roscore
-        - sleep 3; roslaunch mavros px4.launch fcu_url:=/dev/ttyTHS1:921600 gcs_url:=udp://@192.168.0.108:14450
+        - sleep 3; roslaunch mavros px4.launch fcu_url:=/dev/ttyTHS1:921600 gcs_url:=udp://@192.168.0.108:14550
 
   - optitrack:
       layout: tiled
