@@ -8,17 +8,17 @@ windows:
       layout: tiled
       panes:
         - roscore
-        - sleep 1; roslaunch mavros px4.launch fcu_url:=/dev/ttyTHS1:921600 gcs_url:=udp://@192.168.0.108:14450
+        - sleep 3; roslaunch mavros px4.launch fcu_url:=/dev/ttyTHS1:921600 gcs_url:=udp://@192.168.0.108:14450
 
   - optitrack:
       layout: tiled
       panes:
-        - sleep 1; roslaunch optitrack_arena run_optitrack.launch rigid_body:=lilly config_file:=config/optitrack.yaml
+        - sleep 3; roslaunch optitrack_arena run_optitrack.launch rigid_body:=lilly config_file:=config/optitrack.yaml
 
   - sensors:
       layout: tiled
       panes:
-        - sleep 1; roslaunch realsense2_camera rs_camera.launch align_depth:=true
+        - sleep 3; roslaunch realsense2_camera rs_camera.launch align_depth:=true
 
   - static_transforms:
       layout: tiled
